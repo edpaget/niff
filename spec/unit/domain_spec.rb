@@ -1,9 +1,6 @@
 require 'niff/domain'
 require 'docile'
 
-describe Niff::Domain do
-end
-
 describe Niff::DomainBuilder do
   let(:domain_builder) { Niff::DomainBuilder.new("example.com") }
 

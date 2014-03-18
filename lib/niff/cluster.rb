@@ -34,7 +34,7 @@ module Niff
       {
         name: @name,
         nodes: @nodes
-      }.to_json
+      }.to_json(*args)
     end
   end
 end
