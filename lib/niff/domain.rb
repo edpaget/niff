@@ -56,7 +56,7 @@ module Niff
                    clusters)
       @name = name
       @local_tld = local_tld
-      @stating_prefix = staging_prefix
+      @staging_prefix = staging_prefix
       @nodes = nodes
       @clusters = clusters
     end
@@ -68,7 +68,7 @@ module Niff
         staging_prefix: @staging_prefix,
         nodes: @nodes,
         clusters: @clusters,
-      }.to_json
+      }.to_json(*args)
     end
 
   end
