@@ -8,8 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Niff::VERSION
   spec.authors       = ["Edward Paget"]
   spec.email         = ["ed.paget@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{A small commandline tool to make aws and local provisioning simpler}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +19,10 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
+
+  spec.add_dependency "thor", "~> 0.18.1"
+  spec.add_dependency "aws-sdk", "~> 1.36.1"
+  spec.add_dependency "berkshelf" 
+  spec.add_dependency "docile"
 end
