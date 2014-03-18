@@ -9,14 +9,18 @@ module Niff
   class DomainBuilder
     def initialize(name)
       @name = name
-      @local_tld = '.local'
+      @local_tld = 'local'
       @staging_prefix = 'staging'
       @nodes = []
       @clusters = []
     end
 
     def local_tld(ltld)
-      @local_tld = ltld
+      if "." == ltld[0]
+        @local_tld = ltld[1..-1]
+      else
+        @local_tld = ltld
+      end
     end
 
     def staging_prefix(p)
@@ -61,6 +65,10 @@ module Niff
       @clusters = clusters
     end
 
+    def qualify(env)
+      self.send("qualify_#{env.to_s}".to_sym)
+    end
+
     def to_json(*args)
       {
         name: @name,
@@ -71,5 +79,22 @@ module Niff
       }.to_json(*args)
     end
 
+    private
+
+    def qualify_production
+      "." + @name
+    end
+
+    def qualify_staging
+      "." + @staging_prefix + qualify_production
+    end
+
+    def qualify_vagrant
+      segments = @name.split(".")
+      segments = segments[0..-2]
+      segments << @local_tld
+      "." + segments.join(".")
+    end
   end
 end
+

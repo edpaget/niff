@@ -9,7 +9,7 @@ describe Niff::DomainBuilder do
   end
 
   it 'should set a default local_tld' do
-    expect(domain_builder.instance_variable_get(:@local_tld)).to eq(".local")
+    expect(domain_builder.instance_variable_get(:@local_tld)).to eq("local")
   end
 
   it 'should set a default staging_prefix' do
@@ -30,7 +30,7 @@ describe Niff::DomainBuilder do
     it 'should set the local tld' do
       d = domain_builder
       d.local_tld(".hyperlocal")
-      expect(d.instance_variable_get(:@local_tld)).to eq(".hyperlocal")
+      expect(d.instance_variable_get(:@local_tld)).to eq("hyperlocal")
     end
   end
 

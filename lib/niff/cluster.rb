@@ -30,6 +30,10 @@ module Niff
       @nodes = nodes
     end
 
+    def qualify(env)
+      @domain.qualify(env)
+    end
+
     def to_json(*args)
       {
         name: @name,

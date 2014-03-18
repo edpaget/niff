@@ -2,7 +2,7 @@ require 'niff/domain'
 require 'docile'
 
 describe Niff::Domain do
-  let(:domain) { Niff::Domain.new("example.com", ".local", "staging", [], []) }
+  let(:domain) { Niff::Domain.new("example.com", "local", "staging", [], []) }
   describe "::from_file" do
     it 'should load and execute dsl file' do
       expect(File).to receive(:read).with("./cluster.rb").and_return('domain "example.com"')
@@ -26,7 +26,21 @@ describe Niff::Domain do
 
   describe "#to_json" do
     it 'should return a valid json string' do
-      expect(domain.to_json).to eq("{\"name\":\"example.com\",\"local_tld\":\".local\",\"staging_prefix\":\"staging\",\"nodes\":[],\"clusters\":[]}")
+      expect(domain.to_json).to eq("{\"name\":\"example.com\",\"local_tld\":\"local\",\"staging_prefix\":\"staging\",\"nodes\":[],\"clusters\":[]}")
+    end
+  end
+
+  describe "#qualify" do
+    it 'should return the domain name when environment is production' do
+      expect(domain.qualify(:production)).to eq(".example.com")
+    end
+
+    it 'should return the domain with the staging prefix when environment is staging' do
+      expect(domain.qualify(:staging)).to eq(".staging.example.com")
+    end
+
+    it 'should return the domain with the local tld when the environment is vagrant' do
+      expect(domain.qualify(:vagrant)).to eq(".example.local")
     end
   end
 end
