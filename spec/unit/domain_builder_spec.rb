@@ -2,43 +2,36 @@ require 'niff/domain'
 require 'docile'
 
 describe Niff::DomainBuilder do
-  let(:domain_builder) { Niff::DomainBuilder.new("example.com") }
+  let(:domain_builder) { Niff::DomainBuilder.new("example") }
+  before(:each) { @d = domain_builder }
 
   it 'should have a name' do
-    expect(domain_builder.instance_variable_get(:@name)).to eq("example.com")
+    expect(domain_builder.instance_variable_get(:@name)).to eq("example")
   end
 
-  it 'should set a default local_tld' do
-    expect(domain_builder.instance_variable_get(:@local_tld)).to eq("local")
-  end
-
-  it 'should set a default staging_prefix' do
-    expect(domain_builder.instance_variable_get(:@staging_prefix)).to eq("staging")
+  it 'should set a default tld' do
+    expect(domain_builder.instance_variable_get(:@tld)).to eq("org")
   end
 
   it 'should have an empty node list' do
-    expect(domain_builder.instance_variable_get(:@nodes)).to be_an(Array)
+    expect(domain_builder.instance_variable_get(:@nodes)).to be_a(Hash)
     expect(domain_builder.instance_variable_get(:@nodes)).to be_empty
   end
 
   it 'should have an empty cluster list' do
-    expect(domain_builder.instance_variable_get(:@clusters)).to be_an(Array)
+    expect(domain_builder.instance_variable_get(:@clusters)).to be_a(Hash)
     expect(domain_builder.instance_variable_get(:@clusters)).to be_empty
   end
 
-  describe "#local_tld" do
-    it 'should set the local tld' do
-      d = domain_builder
-      d.local_tld(".hyperlocal")
-      expect(d.instance_variable_get(:@local_tld)).to eq("hyperlocal")
-    end
+  it 'should have an empty environment list' do
+    expect(domain_builder.instance_variable_get(:@environments)).to be_a(Hash)
+    expect(domain_builder.instance_variable_get(:@environments)).to be_empty
   end
 
-  describe "#staging_prefix" do
-    it 'should set the staging_prefix' do
-      d = domain_builder
-      d.staging_prefix("alltheworlds")
-      expect(d.instance_variable_get(:@staging_prefix)).to eq("alltheworlds")
+  describe "#tld" do
+    it 'should set the tld' do
+      @d.tld("com")
+      expect(@d.instance_variable_get(:@tld)).to eq("com")
     end
   end
 
@@ -51,9 +44,8 @@ describe Niff::DomainBuilder do
     end
 
     it "should add the node the node list" do
-      d = domain_builder 
-      d.node("noodle") { hostname "ramen" }
-      expect(d.instance_variable_get(:@nodes)).to have(1).items
+      @d.node("noodle") { hostname "ramen" }
+      expect(@d.instance_variable_get(:@nodes)).to have(1).items
     end
   end
 
@@ -66,9 +58,25 @@ describe Niff::DomainBuilder do
     end
 
     it "should add the node the node list" do
-      d = domain_builder 
-      d.cluster("noodle") { type :autoscaling }
-      expect(d.instance_variable_get(:@clusters)).to have(1).items
+      @d.cluster("noodle") { type :autoscaling }
+      expect(@d.instance_variable_get(:@clusters)).to have(1).items
+    end
+  end
+
+  describe "#environment" do
+    it "should execute the environment builder dsl with the given block" do
+      environment_builder = double("Niff::environmentBuilder")
+      expect(Docile).to receive(:dsl_eval).and_return(environment_builder)
+      expect(environment_builder).to receive(:build)
+      domain_builder.environment("noodle") { type double("Niff::Environment") }
+    end
+
+    it "should add the node the node list" do
+      environment_builder = double("Niff::environmentBuilder")
+      environment_builder.stub(:build).and_return(:item)
+      (Docile).stub(:dsl_eval).and_return(environment_builder)
+      @d.environment("noodle") { type double("Niff::Environment") }
+      expect(@d.instance_variable_get(:@environments)).to have(1).items
     end
   end
 
