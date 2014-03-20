@@ -7,7 +7,7 @@ module Niff
     def initialize(name, domain)
       @name = @name
       @domain = domain
-      @nodes = []
+      @nodes = {}
     end
 
     def type(t)
@@ -15,7 +15,7 @@ module Niff
     end
 
     def node(name, &block)
-      @nodes << Docile.dsl_eval(Niff::NodeBuilder.new(name, self), &block).build
+      @nodes[name] = Docile.dsl_eval(Niff::NodeBuilder.new(name, self), &block).build
     end
 
     def build

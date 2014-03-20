@@ -5,7 +5,7 @@ describe Niff::ClusterBuilder do
   let(:cluster_builder) { Niff::ClusterBuilder.new("name", double("Niff::Domain")) }
 
   it 'should have an empty list of node' do
-    expect(cluster_builder.instance_variable_get(:@nodes)).to be_an(Array)
+    expect(cluster_builder.instance_variable_get(:@nodes)).to be_an(Hash)
     expect(cluster_builder.instance_variable_get(:@nodes)).to be_empty
   end
 
