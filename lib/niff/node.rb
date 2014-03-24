@@ -37,6 +37,8 @@ module Niff
 
 
   class Node
+    attr_reader :name, :cookbook, :vb_opts, :instance_type, :hostname
+
     def initialize(name,
                    cookbook, 
                    virtual_box_opts, 

@@ -25,4 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aws-sdk", "~> 1.36.1"
   spec.add_dependency "berkshelf" 
   spec.add_dependency "docile"
+  spec.add_dependency "docker-api", require: 'docker'
 end
