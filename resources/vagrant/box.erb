@@ -1,0 +1,19 @@
+config.vm.define <%= @name %> do |c|
+  c.vm.box = "opscode_ubuntu-12.04"
+  c.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-12.04_chef-provisionerless.box"
+  c.vm.hostname = <%= @hostname %>.to_s
+  c.vm.network :private_network, ip: <%= @ip %>
+
+  c.hostmanager.aliases = <%= @fqdn %> if Vagrant.has_plugin?('vagrant-hostname')
+  
+  c.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", <%= @vb_opts[:memory]  %>|| 512] if b[:memory]
+    vb.customize ["modifyvm", :id, "--cpus", <%= @vb_opts[:cpus] %>|| 1] if b[:cpus]
+  end
+
+  c.vm.provision :shell, inline: <<-BASH
+    export AWS_ACCESS_KEY_ID=<%= @aws_access_key_id %>
+    export AWS_SECRET_ACCESS_KEY=<%= @aws_secret_access_key %>
+    /vagrant/setup.sh -H #{<%= @hostname %>} -c #{<%= @cookbook %>} -e vagrant
+  BASH
+end
