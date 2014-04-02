@@ -1,7 +1,7 @@
-require 'niff/node'
+require 'niff/dsl/node'
 
-describe Niff::NodeBuilder do
-  let(:builder) { Niff::NodeBuilder.new("name", double("Niff::Cluster")) }
+describe Niff::DSL::NodeBuilder do
+  let(:builder) { Niff::DSL::NodeBuilder.new("name", double("Niff::Cluster")) }
 
   it 'should have a hostname equal to the given node name' do
     expect(builder.instance_variable_get(:@name)).to eq(builder.instance_variable_get(:@hostname))
@@ -17,14 +17,6 @@ describe Niff::NodeBuilder do
       b = builder
       b.instance_type("m1.small")
       expect(b.instance_variable_get(:@type)).to eq("m1.small")
-    end
-  end
-
-  describe "#coobook" do
-    it 'should set the cookbook' do
-      b = builder
-      b.cookbook("zoo-zookeeper")
-      expect(b.instance_variable_get(:@cookbook)).to eq("zoo-zookeeper")
     end
   end
 

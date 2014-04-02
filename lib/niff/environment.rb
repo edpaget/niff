@@ -1,34 +1,14 @@
 require 'json'
 
 module Niff
-  class NoEnvironmentTypeSpecified < StandardError
-  end
-  
-  class EnvironmentBuilder
-    def initialize(name, type=nil) 
+  class Environment
+    def initialize(name, domain, docker_conn, env)
       @name = name
-      @type = type
+      @domain = @domain
+      @docker_conn = @docker_conn
+      @services = @env[:services]
     end
 
-    def subdomain(s)
-      @subdomain = s
-    end
-
-    def tld(t)
-      @tld = t
-    end
-
-    def type(t)
-      @type = t
-    end
-
-    def build
-      raise NoEnvironmentTypeSpecified.new unless @type
-      @type.new(@name, @subdomain, @tld)
-    end
-  end
-
-  module Environment
     def qualify(domain)
       tld = @tld || domain.tld
       d = String.new
