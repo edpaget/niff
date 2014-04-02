@@ -1,17 +1,14 @@
-domain "zooniverse.org" do
+environment :test do
+  domain "example.com"
+  docker_uri "docker.example.com"
+  docker_auth "example_user", "example_pass"
 
-  cluster :zookeepers do
-    [:zk1, :zk2, :zk3].each do |n|
-      node n do
-        cookbook "zoo-zookeeper"
-        instance_type "m1.small"
+  service :test_service do
+    node :web_frontend do
+      container :nginx do
+      
       end
     end
   end
 
-  node :kafka1 do
-    cookbook "zoo-kafka"
-    instance_type "m3.large"
-    virtual_box_opts({memory: 2048, cpus: 2})
-  end
 end

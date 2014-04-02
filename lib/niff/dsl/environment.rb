@@ -6,18 +6,18 @@ require 'niff/dsl/dsl_builder'
 require 'niff/environment'
 
 module Niff
-  module EnvironmentCommand
-    def environment(name, &block)
-      if @env[:environments].has_key?(name) && block_given?
-        @env[:enviornments][:name]
-      else
-        @env[:environments][name] = Docile.dsl_eval(EnvironmentBuilder.new(name, @env),
-                                                    &block).build
+  module DSL
+    module EnvironmentCommand
+      def environment(name, &block)
+        if @env[:environments].has_key?(name) && block_given?
+          @env[:environments][name]
+        else
+          @env[:environments][name] = Docile.dsl_eval(EnvironmentBuilder.new(name, @env),
+                                                      &block).build
+        end
       end
     end
-  end
 
-  module DSL
     class EnvironmentBuilder < Niff::DSL::DSLBuilder
       include Niff::DSL::ServiceCommand
       include Niff::DSL::NodeCommand
@@ -38,7 +38,7 @@ module Niff
 
       def docker_auth(user, pass)
         @docker_conn[:user] = user
-        @docker_connp[:pass] = pass
+        @docker_conn[:pass] = pass
       end
 
       def build

@@ -4,11 +4,13 @@ require 'niff/dsl/container'
 require 'niff/dsl/node'
 
 module Niff
-  class DSL
+  class DSLExec
     include Niff::DSL::EnvironmentCommand
     include Niff::DSL::ServiceCommand
     include Niff::DSL::ContainerCommand
     include Niff::DSL::NodeCommand
+
+    attr_reader :env
 
     def initialize()
       @env = {
@@ -19,9 +21,10 @@ module Niff
       }
     end
 
-    def from_file(path)
-      self.class_eval(File.read(path))
+    def self.from_file(path)
+      envs = self.new
+      envs.instance_eval(File.read(path))
+      envs.env[:environments]
     end
-
   end
 end

@@ -4,9 +4,9 @@ module Niff
   class Environment
     def initialize(name, domain, docker_conn, env)
       @name = name
-      @domain = @domain
-      @docker_conn = @docker_conn
-      @services = @env[:services]
+      @domain = domain
+      @docker_conn = docker_conn
+      @services = env[:services]
     end
 
     def qualify(domain)

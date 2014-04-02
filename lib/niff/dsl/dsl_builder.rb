@@ -1,7 +1,7 @@
 module Niff
   module DSL
     class DSLBuilder
-      def initailize(name, env={})
+      def initialize(name, env={})
         @name = name
         @env = {
           nodes: Hash.new { |h,k| env[:nodes][k] },

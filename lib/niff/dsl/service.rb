@@ -7,11 +7,11 @@ require 'niff/service'
 module Niff
   module DSL
     module ServiceCommand
-      def environment(name, &block)
-        if @env[:environments].has_key?(name) && block_given?
-          @env[:enviornments][:name]
+      def service(name, &block)
+        if @env[:services].has_key?(name) && block_given?
+          @env[:services][:name]
         else
-          @env[:environments][name] = Docile.dsl_eval(ServiceBuilder.new(name, @env),
+          @env[:services][name] = Docile.dsl_eval(ServiceBuilder.new(name, @env),
                                                       &block).build
         end
       end

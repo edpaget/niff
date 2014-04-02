@@ -1,15 +1,15 @@
 require 'docile'
 require 'niff/dsl/dsl_builder'
-require 'niff/service'
+require 'niff/container'
 
 module Niff
   module DSL
     module ContainerCommand
       def container(name, &block)
-        if @env[:environments].has_key?(name) && block_given?
-          @env[:enviornments][:name]
+        if @env[:containers].has_key?(name) && block_given?
+          @env[:containers][:name]
         else
-          @env[:environments][name] = Docile.dsl_eval(ContainerBuilder.new(name, @env),
+          @env[:containers][name] = Docile.dsl_eval(ContainerBuilder.new(name, @env),
                                                       &block).build
         end
       end
