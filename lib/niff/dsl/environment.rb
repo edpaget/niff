@@ -1,27 +1,17 @@
-require 'docile'
+require 'niff/dsl/dsl_builder'
 require 'niff/dsl/service'
 require 'niff/dsl/node'
 require 'niff/dsl/container'
-require 'niff/dsl/dsl_builder'
+require 'niff/dsl/volume'
 require 'niff/environment'
 
 module Niff
   module DSL
-    module EnvironmentCommand
-      def environment(name, &block)
-        if @env[:environments].has_key?(name) && block_given?
-          @env[:environments][name]
-        else
-          @env[:environments][name] = Docile.dsl_eval(EnvironmentBuilder.new(name, @env),
-                                                      &block).build
-        end
-      end
-    end
-
     class EnvironmentBuilder < Niff::DSL::DSLBuilder
-      include Niff::DSL::ServiceCommand
-      include Niff::DSL::NodeCommand
-      include Niff::DSL::ContainerCommand
+      include_command :service, Niff::DSL::ServiceBuilder
+      include_command :node, Niff::DSL::ServiceBuilder
+      include_command :container, Niff::DSL::ServiceBuilder
+      include_command :volume, Niff::DSL::ServiceBuilder
 
       def initialize(name, env={})
         super 

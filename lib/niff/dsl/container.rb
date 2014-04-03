@@ -1,30 +1,17 @@
-require 'docile'
 require 'niff/dsl/dsl_builder'
+require 'niff/dsl/volume'
 require 'niff/container'
 
 module Niff
   module DSL
-    module ContainerCommand
-      def container(name, &block)
-        if @env[:containers][name] && block_given?
-          @env[:containers][name] = @env[:containers][name]
-        else
-          @env[:containers][name] = Docile.dsl_eval(ContainerBuilder.new(name, @env),
-                                                      &block).build
-        end
-      end
-    end
-
     class ContainerBuilder < Niff::DSL::DSLBuilder
-      def initialize(name, env={})
-        super
-      end
+      include_command :volume, Niff::DSL::VolumeBuilder
 
       def image(i)
         @image = i
       end
 
-      def image_verison(v)
+      def image_version(v)
         @image_version = v
       end
 
@@ -33,12 +20,12 @@ module Niff
         @args = args
       end
 
-      def config_mount(**dirs)
-        @config_mount = dirs
+      def config_dir(dir)
+        @config_dir = dir
       end
 
-      def config_uri(uri)
-        @config_uri = uri
+      def port(p)
+        @port = p
       end
 
       def build
@@ -46,8 +33,9 @@ module Niff
                             @image, 
                             @image_version,
                             @arguments, 
-                            @config_mount, 
-                            @config_uri)
+                            @port,
+                            @config_mount,
+                            @env)
       end
     end
   end
